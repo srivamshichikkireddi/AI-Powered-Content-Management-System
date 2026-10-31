@@ -2,6 +2,7 @@ from backend.app.schemas.common import ErrorResponse, HealthResponse
 from backend.app.schemas.user import UserCreate, UserResponse, UserRoleUpdate
 from backend.app.schemas.auth import LoginRequest, TokenResponse, LogoutResponse
 from backend.app.schemas.audit import AuditLogResponse
+from backend.app.schemas.document import DocumentResponse, DocumentStatusResponse, DocumentUploadResponse
 
 __all__ = [
     "ErrorResponse",
@@ -13,4 +14,7 @@ __all__ = [
     "TokenResponse",
     "LogoutResponse",
     "AuditLogResponse",
+    "DocumentResponse",
+    "DocumentStatusResponse",
+    "DocumentUploadResponse",
 ]

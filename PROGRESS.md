@@ -1,14 +1,14 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 2 / M2 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 3 / M3 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M2 (Authentication, Sessions, RBAC & Lockout)** — Completed, awaiting user confirmation to proceed to M3.
-- **Active Branch**: `feature/US-01-auth-security`
+- **Active Milestone**: **M3 (Document Intake, Validation & Deduplication)** — Completed, awaiting user confirmation to proceed to M4.
+- **Active Branch**: `feature/US-02-intake-storage`
 - **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
-- **Test Evidence**: 13 automated tests passing with 75% coverage in `evidence/TC-SEC-07_08_09_ADM-03.txt` and `evidence/TC-SEC-07_08_09_ADM-03_junit.xml`.
+- **Test Evidence**: 19 automated tests passing with 74% coverage in `evidence/TC-UP-01_02_03_04_SEC-04.txt` and `evidence/TC-UP-01_02_03_04_SEC-04_junit.xml`.
 
 ---
 
@@ -27,32 +27,31 @@
 - [x] Baseline health endpoints verified and committed on `feature/M1-scaffold-ci`.
 
 ### Milestone 2: Authentication, Sessions, RBAC & Account Lockout (Checkpoint 2)
-- [x] **Password Hashing (AICMS-SR-007, TC-SEC-07)**: Implemented bcrypt with 12 rounds and salt; plain passwords never stored or logged.
-- [x] **Account Lockout (AICMS-SR-008, TC-SEC-08)**: 5 consecutive failed login attempts trigger a 15-minute lockout; the 6th attempt returns `423 Locked` and records an audited security event.
-- [x] **Server-Side Session Store & Idle Expiry (AICMS-SR-008, TC-SEC-09)**: Opaque 256-bit cryptographically secure session tokens in database; enforced 30-minute idle inactivity timeout; `/api/v1/auth/logout` explicitly revokes session.
-- [x] **Role-Based Access Control (AICMS-F-024, TC-ADM-03)**:
-  - System roles: `admin`, `editor`, `user`, `auditor`.
-  - Initial system personas seeded on startup: `admin_user`, `editor_user`, `regular_user`, `auditor_user`.
-  - Admin-only routes (`/api/v1/users`) reject regular users with `403 Forbidden` (`FORBIDDEN_ROLE`).
-  - Auditor routes (`/api/v1/audit/logs`) restrict access to auditors and administrators.
-- [x] **Audit Trail Core (AICMS-SR-001)**: Comprehensive audit logging table capturing login successes, failures, account lockouts, session expirations, and logouts with correlation ID tracking.
+- [x] Password hashing with bcrypt (AICMS-SR-007, TC-SEC-07).
+- [x] Account lockout after 5 consecutive failed attempts with HTTP 423 on 6th attempt (AICMS-SR-008, TC-SEC-08).
+- [x] Server-side session store with 30-min idle timeout and revocation (AICMS-SR-008, TC-SEC-09).
+- [x] Role-Based Access Control (`admin`, `editor`, `user`, `auditor`) and Audit Trail (AICMS-F-024, AICMS-SR-001, TC-ADM-03).
+
+### Milestone 3: Document Intake, Validation & Deduplication (Checkpoint 3)
+- [x] **Multi-Format Intake (AICMS-F-001, TC-UP-01)**: PDF, DOCX, TXT accepted and queued with status `QUEUED`.
+- [x] **Size Limit Enforcement (AICMS-F-002, TC-UP-02)**: Files > 20 MB strictly rejected with `HTTP 413 Payload Too Large`.
+- [x] **SHA-256 Deduplication (AICMS-SR-004, TC-UP-03)**: Duplicate document content rejected with `HTTP 409 Conflict` referencing existing document.
+- [x] **Format Whitelist & Integrity (AICMS-F-003, TC-UP-04)**: Unsupported formats (`.csv`, `.zip`, `.py`) rejected with `HTTP 400 UNSUPPORTED_FORMAT`.
+- [x] **Magic Bytes & Disguised File Defense (AICMS-SR-002, TC-SEC-04)**: Executables (`MZ`), invalid headers, and disguised binaries rejected with `HTTP 400 INVALID_FILE_SIGNATURE`.
+- [x] **Pre-Disclosure Document Authorization (ADR-002, ADR-005)**: Direct-ID queries without permission return `404 Not Found` to prevent leaking document existence.
 - [x] **Test Verification**:
-  - All 13 tests passed (100% pass rate) with 75% line/branch coverage.
-  - Verified live API endpoints via HTTP calls.
-  - Raw evidence stored in `evidence/TC-SEC-07_08_09_ADM-03.txt`.
+  - 19 automated tests passing (100% pass rate) with 74% coverage.
+  - Raw evidence stored in `evidence/TC-UP-01_02_03_04_SEC-04.txt`.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 3 (Checkpoint 3)**: Document Intake, Multi-Format Validation (PDF/DOCX/TXT $\le$ 20MB), Extension + Magic Bytes Inspection, SHA-256 Deduplication (409 Conflict), and Queue Status Tracking (`TC-UP-01`, `TC-UP-02`, `TC-UP-03`, `TC-UP-04`, `TC-SEC-04`).
+- **Milestone 4 (Checkpoint 4)**: Text Extraction (PyPDF, python-docx), AI Semantic Embeddings (`all-MiniLM-L6-v2`), Scikit-learn Categorization Classifier, TF-IDF Keyphrase/Topic Extraction, and Simulated Failure Injection Flags (`TC-EXT-01`, `TC-EXT-02`, `TC-AI-01`, `TC-AI-02`, `TC-AI-03`).
 
 ---
 
-## 4. How to Run & Verify M2
+## 4. How to Run & Verify M3
 ```bash
 # Run test suite
 docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
-
-# Test login API with admin user
-curl -X POST http://localhost:8000/api/v1/auth/login -H "Content-Type: application/json" -d '{"username":"admin_user","password":"AdminPass123!"}'
 ```
