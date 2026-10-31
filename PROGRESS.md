@@ -1,14 +1,14 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 6 / M6 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 7 / M7 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M6 (Metadata Management, Admin Taxonomy & Purge)** — Completed, awaiting user confirmation to proceed to M7.
-- **Active Branch**: `feature/US-06-US-07-US-08-metadata-admin`
-- **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
-- **Test Evidence**: 39 automated tests passing (100% pass rate) with 71% codebase line coverage in `evidence/TC-MD-01_ADM-01_02_DATA-01_02_OPS-02_03.txt` and `evidence/TC-MD-01_ADM-01_02_DATA-01_02_OPS-02_03_junit.xml`.
+- **Active Milestone**: **M7 (Web UI Dashboard, TLS Hardening & Development Freeze)** — Completed, awaiting user confirmation to proceed to M8.
+- **Active Branch**: `feature/US-10-US-11-frontend-hardening`
+- **Docker Status**: All 6 containers healthy and running (`aicms_proxy`, `aicms_frontend`, `aicms_backend`, `aicms_worker`, `aicms_db`, `aicms_redis`).
+- **Test Evidence**: 41 automated tests passing (100% pass rate) with 71% codebase line coverage in `evidence/TC-SEC-03_UX-01.txt` and `evidence/TC-SEC-03_UX-01_junit.xml`.
 
 ---
 
@@ -61,22 +61,34 @@
 - [x] **Document Deletion & Vector Purge (AICMS-F-021, AICMS-NF-007, TC-DATA-01, TC-DATA-02)**: `DELETE /api/v1/documents/{id}` hard-deletes database record, metadata, vectors, permissions, and physical storage file, removing it immediately from search results with zero orphan records.
 - [x] **Audit Trail of Data Mutations (AICMS-F-018, TC-SEC-02)**: All metadata corrections, taxonomy creations/deletions, re-indexing jobs, and document deletions emit tamper-evident audit events.
 - [x] **Operational Metrics & Availability (AICMS-F-022, AICMS-NF-002, AICMS-NF-005, TC-OPS-02, TC-OPS-03)**: Admin `/api/v1/admin/metrics` JSON summary without document secrets and standard Prometheus `/metrics` text exposition, confirming $\ge 99.5\%$ service availability calculation.
+
+### Milestone 7: Web UI Dashboard, TLS Hardening & Development Freeze (Checkpoint 7)
+- [x] **Full-Featured React Web UI (`frontend/src/App.jsx`)**:
+  - Persona quick-switcher across `regular_user`, `editor_user`, `admin_user`, `auditor_user` testing RBAC seamlessly.
+  - Multi-tab navigation: Semantic Search with cosine relevance badges & highlighted snippets, Intake & Upload with client/server validation, Document Explorer & in-place Metadata Editor Modal with optimistic concurrency conflict detection, Admin & Taxonomy Console, and Security Audit Trail.
+  - Keyboard accessibility (`TC-UX-01`, `AICMS-NF-005`): Visible focus rings (`focus:ring-2`), semantic HTML tags, and accessible ARIA attributes.
+- [x] **TLS Transport Hardening (`AICMS-NF-003`, `AICMS-SR-003`, `TC-SEC-03`)**:
+  - Nginx reverse proxy enforcing TLS 1.2+ with restricted cipher suites (`HIGH:!aNULL:!MD5`).
+  - Automatic HTTP 301 redirection from port 80 to HTTPS on port 443.
+- [x] **Development Freeze Tagged**:
+  - Tagged `v1.0-freeze` marking complete feature implementation before quantitative benchmarks and reports.
 - [x] **Test Verification**:
-  - 39 automated tests passing (100% pass rate) with 71% codebase line coverage.
-  - Raw evidence stored in `evidence/TC-MD-01_ADM-01_02_DATA-01_02_OPS-02_03.txt` and JUnit XML.
+  - 41 automated tests passing (100% pass rate) with 71% codebase line coverage.
+  - Raw evidence stored in `evidence/TC-SEC-03_UX-01.txt` and JUnit XML.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 7 (Checkpoint 7)**: Complete React Web UI Dashboard (Login, Document Upload, Search & Filters, Metadata Editor & Concurrency View, Admin Taxonomy & Metrics Dashboard, Keyboard Accessibility per `TC-UX-01`), TLS Hardening, and Development Freeze (`v1.0-freeze`).
+- **Milestone 8 (Checkpoint 8)**: Quantitative Benchmarking & Evaluation (`TC-AI-04` Categorization Accuracy Benchmark, `TC-PERF-01` Search Latency $\le 3\text{s}$, `TC-PERF-02` Asynchronous Pipeline Non-Blocking Concurrency, `TC-PERF-03` Retrieval Precision@5 $\ge 80\%$, and `TC-OPS-03` Uptime Availability $\ge 99.5\%$).
 
 ---
 
-## 4. How to Run & Verify M6
+## 4. How to Run & Verify M7
 ```bash
-# 1. Run full test suite with coverage
-docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
+# 1. Access Web Portal via Browser
+http://localhost:5173/   # Frontend dev server
+https://localhost:8443/  # TLS reverse proxy portal
 
-# 2. Check metrics endpoint
-curl -s http://localhost:8000/metrics
+# 2. Run test suite
+docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
 ```
