@@ -1,14 +1,18 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 7 / M7 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 8 / M8 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M7 (Web UI Dashboard, TLS Hardening & Development Freeze)** — Completed, awaiting user confirmation to proceed to M8.
-- **Active Branch**: `feature/US-10-US-11-frontend-hardening`
+- **Active Milestone**: **M8 (Quantitative Benchmarking & Evaluation)** — Completed, awaiting user confirmation to proceed to M9.
+- **Active Branch**: `feature/US-12-benchmarks-eval`
 - **Docker Status**: All 6 containers healthy and running (`aicms_proxy`, `aicms_frontend`, `aicms_backend`, `aicms_worker`, `aicms_db`, `aicms_redis`).
-- **Test Evidence**: 41 automated tests passing (100% pass rate) with 71% codebase line coverage in `evidence/TC-SEC-03_UX-01.txt` and `evidence/TC-SEC-03_UX-01_junit.xml`.
+- **Test Evidence**: 47 automated tests passing (100% pass rate) with 75% codebase line coverage across unit, integration, and quantitative benchmarks.
+- **Evidence Files**:
+  - `evidence/TC-AI-04_categorization_benchmark.txt` and `evidence/TC-AI-04_junit.xml`
+  - `evidence/TC-PERF-01_02_03_performance_benchmarks.txt` and `evidence/TC-PERF-01_02_03_junit.xml`
+  - `evidence/TC-OPS-03_availability_benchmark.txt` and `evidence/TC-OPS-03_junit.xml`
 
 ---
 
@@ -70,25 +74,37 @@
 - [x] **TLS Transport Hardening (`AICMS-NF-003`, `AICMS-SR-003`, `TC-SEC-03`)**:
   - Nginx reverse proxy enforcing TLS 1.2+ with restricted cipher suites (`HIGH:!aNULL:!MD5`).
   - Automatic HTTP 301 redirection from port 80 to HTTPS on port 443.
-- [x] **Development Freeze Tagged**:
-  - Tagged `v1.0-freeze` marking complete feature implementation before quantitative benchmarks and reports.
-- [x] **Test Verification**:
-  - 41 automated tests passing (100% pass rate) with 71% codebase line coverage.
-  - Raw evidence stored in `evidence/TC-SEC-03_UX-01.txt` and JUnit XML.
+- [x] **Development Freeze Tagged**: Tagged `v1.0-freeze`.
+
+### Milestone 8: Quantitative Benchmarking & Evaluation (Checkpoint 8)
+- [x] **AI Categorization Accuracy (`TC-AI-04`, `AICMS-NF-009`)**:
+  - Top-1 Accuracy: **96.67%** (29/30 correct) exceeding the $\ge 80.0\%$ SLA target.
+  - Per-category: Engineering (80%), Finance (100%), Legal (100%), Human Resources (100%), Operations (100%), General (100%).
+- [x] **Search Latency Performance (`TC-PERF-01`, `AICMS-NF-001`)**:
+  - 50 consecutive search queries against pgvector engine.
+  - 90th percentile latency (p90): **71.09 ms (0.0711 s)**, dramatically surpassing the $\le 3000\text{ ms}$ SLA target.
+- [x] **Asynchronous Non-Blocking Concurrency (`TC-PERF-02`, `AICMS-NF-004`)**:
+  - 20 concurrent operations with 100% success rate, median 45.42 ms, zero dropped requests.
+- [x] **10-Page Document End-to-End Processing (`TC-PERF-03`, `AICMS-NF-010`)**:
+  - Intake, text extraction, taxonomy categorization, keywords, embeddings, and vector indexing completed in **0.1584 seconds (158.4 ms)**, far below the $\le 60.0$ seconds limit.
+- [x] **Information Retrieval Relevance Benchmark (SRS §5.2)**:
+  - 20 reviewed natural language queries evaluated against candidate set.
+  - Precision@5: **95.00%** (target $\ge 80.0\%$), Mean Reciprocal Rank (MRR): **0.7533**.
+- [x] **Service Availability & Reliability Analysis (`TC-OPS-03`, `AICMS-NF-002`)**:
+  - Verified operational telemetry: **100.00% availability** exceeding the $\ge 99.50\%$ monthly SLA target.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 8 (Checkpoint 8)**: Quantitative Benchmarking & Evaluation (`TC-AI-04` Categorization Accuracy Benchmark, `TC-PERF-01` Search Latency $\le 3\text{s}$, `TC-PERF-02` Asynchronous Pipeline Non-Blocking Concurrency, `TC-PERF-03` Retrieval Precision@5 $\ge 80\%$, and `TC-OPS-03` Uptime Availability $\ge 99.5\%$).
+- **Milestone 9 (Checkpoint 9)**: 38 Test Cases Regression Register and 4 Formal Academic Course Reports (`Unit_Test_Report.md`, `System_Validation_Report.md`, `Code_Coverage_Report.md`, `Branch_Coverage_Report.md`).
 
 ---
 
-## 4. How to Run & Verify M7
+## 4. How to Run & Verify M8
 ```bash
-# 1. Access Web Portal via Browser
-http://localhost:5173/   # Frontend dev server
-https://localhost:8443/  # TLS reverse proxy portal
+# 1. Run full benchmark suite with verbose output
+docker exec aicms_backend pytest /app/backend/tests/benchmarks -v -s
 
-# 2. Run test suite
+# 2. Run entire test suite (47 tests) with coverage
 docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
 ```

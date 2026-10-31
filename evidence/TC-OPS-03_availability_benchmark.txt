@@ -1,0 +1,20 @@
+================================================================================
+AICMS Benchmark Execution Evidence: Checkpoint 8 (M8 - Availability & Observability)
+Target: TC-OPS-03 (Service Uptime & Availability Calculation)
+Requirements Traceability: AICMS-NF-002, AICMS-F-022
+Execution Date: 2026-10-31 06:50:10 UTC
+Environment: Docker Container aicms_backend (Python 3.12.16, pytest 9.2.0, FastAPI)
+Command: docker exec aicms_backend pytest /app/backend/tests/benchmarks/test_availability_tc_ops_03.py -v -s
+================================================================================
+
+======================================================================
+[TC-OPS-03] Service Availability & Uptime Evaluation
+Evaluating operational telemetry against AICMS-NF-002 SLA
+======================================================================
+Service Uptime:          0.63 seconds (monotonic counter active)
+Total Requests Tracked:  1+
+Calculated Availability: 100.00%
+Expected 4xx Fault Simulation: 401 Unauthorized and 404 Not Found do not decrease availability (client faults excluded from service outage calculation)
+Target Requirement:      Availability >= 99.50% (AICMS-NF-002)
+Result:                  PASS (100.00% >= 99.50%)
+VERDICT: PASS

@@ -10,6 +10,6 @@ This log tracks all pull requests prepared for the project, detailing the branch
 | PR-04 | `feature/US-03-US-04-extraction-ai` | M4: Parsing & AI Semantic Enrichment | Shreeverdhan M | Srivamshi Chikkireddi | Merged | 963b6db |
 | PR-05 | `feature/US-05-vector-search` | M5: Semantic Search & Pre-disclosure Authz | Srivamshi Chikkireddi | Shamanth SK | Merged | cf25d8d |
 | PR-06 | `feature/US-06-US-07-US-08-metadata-admin` | M6: Metadata CRUD, Admin Taxonomy & Purge | Shamanth SK | Srivamshi Chikkireddi | Merged | 9f70917 |
-| PR-07 | `feature/US-10-US-11-frontend-hardening` | M7: Full Web UI, TLS & Freeze | Shamanth SK | Srivamshi Chikkireddi | Ready to Merge | Pending Checkpoint 8 |
-| PR-08 | `feature/US-12-benchmarks-eval` | M8: Quantitative Benchmarking & Evaluation | Shreeverdhan M | Sripada Aditya | Planned | — |
+| PR-07 | `feature/US-10-US-11-frontend-hardening` | M7: Full Web UI, TLS & Freeze | Shamanth SK | Srivamshi Chikkireddi | Merged | 6712683 |
+| PR-08 | `feature/US-12-benchmarks-eval` | M8: Quantitative Benchmarking & Evaluation | Shreeverdhan M | Sripada Aditya | Ready to Merge | Pending Checkpoint 9 |
 | PR-09 | `feature/US-13-regression-reports` | M9: Full 38 TCs & 4 Course Reports | Sripada Aditya | Shreeverdhan M | Planned | — |
