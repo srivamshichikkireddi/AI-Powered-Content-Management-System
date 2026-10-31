@@ -3,6 +3,7 @@ from typing import AsyncGenerator
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.pool import NullPool
 
 from backend.app.core.config import settings
 
@@ -21,9 +22,7 @@ if db_url.startswith("postgresql://"):
 engine = create_async_engine(
     db_url,
     echo=False,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
+    poolclass=NullPool,  # NullPool ensures asyncpg connections are clean per-request and across test loops
 )
 
 AsyncSessionLocal = async_sessionmaker(
