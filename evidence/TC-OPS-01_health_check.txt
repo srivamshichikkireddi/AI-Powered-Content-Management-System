@@ -1,0 +1,41 @@
+﻿============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /app/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, cov-7.1.0, asyncio-1.4.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+backend/tests/unit/test_config.py::test_settings_defaults PASSED         [ 16%]
+backend/tests/unit/test_config.py::test_structured_logging_redacts_sensitive_keys PASSED [ 33%]
+backend/tests/unit/test_health.py::test_root_endpoint PASSED             [ 50%]
+backend/tests/unit/test_health.py::test_health_endpoint PASSED           [ 66%]
+backend/tests/unit/test_health.py::test_health_degraded_when_service_down PASSED [ 83%]
+backend/tests/unit/test_health.py::test_standardized_error_format_404 PASSED [100%]
+
+------------ generated xml file: /app/evidence/TC-OPS-01_junit.xml -------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.16-final-0 _______________
+
+Name                                Stmts   Miss Branch BrPart  Cover   Missing
+-------------------------------------------------------------------------------
+backend/app/__init__.py                 0      0      0      0   100%
+backend/app/api/__init__.py             0      0      0      0   100%
+backend/app/api/health.py              26      8      0      0    69%   16-23
+backend/app/core/__init__.py            0      0      0      0   100%
+backend/app/core/config.py             38      1      2      1    95%   50
+backend/app/core/database.py           27     12      2      1    55%   19, 39-43, 47-53
+backend/app/core/errors.py             41     17      0      0    59%   14-17, 23-25, 63-70, 81-83
+backend/app/core/logging.py            35      4     10      3    84%   16-17, 45, 61
+backend/app/main.py                    44      9      2      0    76%   21-32
+backend/app/models/__init__.py          0      0      0      0   100%
+backend/app/schemas/__init__.py         0      0      0      0   100%
+backend/app/schemas/common.py          13      0      0      0   100%
+backend/app/services/__init__.py        0      0      0      0   100%
+backend/app/workers/__init__.py         0      0      0      0   100%
+backend/app/workers/celery_app.py       4      4      0      0     0%   1-11
+backend/app/workers/tasks.py            7      7      0      0     0%   1-10
+-------------------------------------------------------------------------------
+TOTAL                                 235     62     16      5    73%
+============================== 6 passed in 2.02s ===============================
