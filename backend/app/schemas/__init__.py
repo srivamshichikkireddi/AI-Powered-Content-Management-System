@@ -7,6 +7,13 @@ from backend.app.schemas.document import (
     DocumentStatusResponse,
     DocumentUploadResponse,
     DocumentMetadataResponse,
+    DocumentMetadataUpdate,
+)
+from backend.app.schemas.category import (
+    CategoryCreate,
+    CategoryResponse,
+    ReindexRequest,
+    ReindexResponse,
 )
 from backend.app.schemas.search import SearchResultItem, SearchResultResponse
 
@@ -24,6 +31,11 @@ __all__ = [
     "DocumentStatusResponse",
     "DocumentUploadResponse",
     "DocumentMetadataResponse",
+    "DocumentMetadataUpdate",
+    "CategoryCreate",
+    "CategoryResponse",
+    "ReindexRequest",
+    "ReindexResponse",
     "SearchResultItem",
     "SearchResultResponse",
 ]

@@ -1,14 +1,14 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 5 / M5 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 6 / M6 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M5 (Vector Indexing & Semantic Search Engine)** — Completed, awaiting user confirmation to proceed to M6.
-- **Active Branch**: `feature/US-05-vector-search`
+- **Active Milestone**: **M6 (Metadata Management, Admin Taxonomy & Purge)** — Completed, awaiting user confirmation to proceed to M7.
+- **Active Branch**: `feature/US-06-US-07-US-08-metadata-admin`
 - **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
-- **Test Evidence**: 34 automated tests passing (100% pass rate) with 72% coverage in `evidence/TC-IDX-01_SR-01_04_SEC-05.txt` and `evidence/TC-IDX-01_SR-01_04_SEC-05_junit.xml`.
+- **Test Evidence**: 39 automated tests passing (100% pass rate) with 71% codebase line coverage in `evidence/TC-MD-01_ADM-01_02_DATA-01_02_OPS-02_03.txt` and `evidence/TC-MD-01_ADM-01_02_DATA-01_02_OPS-02_03_junit.xml`.
 
 ---
 
@@ -53,22 +53,30 @@
 - [x] **Authorization-Before-Disclosure (AICMS-SR-005, TC-SEC-05, ADR-002)**: Search engine filters out unauthorized documents at query time before relevance scoring or metadata disclosure, preventing any information leakage.
 - [x] **Graceful Empty & No-Result States (AICMS-F-012, TC-SR-03)**: Clean empty search handling without errors.
 - [x] **Seed Data & Demo Walkthrough Script**: Created `seed_demo.py` and `docs/demo/SPRINT1_DEMO_SCRIPT.md` (60-second video demo walkthrough script matching sprint goals).
+
+### Milestone 6: Metadata Management, Admin Taxonomy & Purge (Checkpoint 6)
+- [x] **Metadata CRUD & Optimistic Concurrency (AICMS-F-016, AICMS-SR-006, TC-MD-01)**: `PATCH /api/v1/documents/{id}/metadata` with optimistic revision locking (HTTP 409 on version mismatch) and role enforcement (`editor`/`admin` required, non-editors get HTTP 403).
+- [x] **Taxonomy Management & Referential Integrity (AICMS-F-019, AICMS-SR-001, TC-ADM-01)**: `GET`, `POST`, and `DELETE` on `/api/v1/categories`. Rejects category deletion with HTTP 409 if active documents reference it.
+- [x] **Re-indexing Jobs (AICMS-F-020, TC-ADM-02)**: `POST /api/v1/admin/reindex` queues re-embedding with unique job ID, completed status, and document counts.
+- [x] **Document Deletion & Vector Purge (AICMS-F-021, AICMS-NF-007, TC-DATA-01, TC-DATA-02)**: `DELETE /api/v1/documents/{id}` hard-deletes database record, metadata, vectors, permissions, and physical storage file, removing it immediately from search results with zero orphan records.
+- [x] **Audit Trail of Data Mutations (AICMS-F-018, TC-SEC-02)**: All metadata corrections, taxonomy creations/deletions, re-indexing jobs, and document deletions emit tamper-evident audit events.
+- [x] **Operational Metrics & Availability (AICMS-F-022, AICMS-NF-002, AICMS-NF-005, TC-OPS-02, TC-OPS-03)**: Admin `/api/v1/admin/metrics` JSON summary without document secrets and standard Prometheus `/metrics` text exposition, confirming $\ge 99.5\%$ service availability calculation.
 - [x] **Test Verification**:
-  - 34 automated tests passing (100% pass rate) with 72% overall codebase line coverage.
-  - Raw evidence stored in `evidence/TC-IDX-01_SR-01_04_SEC-05.txt` and JUnit XML `evidence/TC-IDX-01_SR-01_04_SEC-05_junit.xml`.
+  - 39 automated tests passing (100% pass rate) with 71% codebase line coverage.
+  - Raw evidence stored in `evidence/TC-MD-01_ADM-01_02_DATA-01_02_OPS-02_03.txt` and JUnit XML.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 6 (Checkpoint 6)**: Metadata Management, Revision Tracking, Taxonomy Admin, Deletion & Purge, and Metrics Monitoring (`AICMS-F-016..022`, `AICMS-NF-005..007`, `TC-MD-01`, `TC-ADM-01..02`, `TC-DATA-01..02`, `TC-SEC-02`, `TC-OPS-02..03`).
+- **Milestone 7 (Checkpoint 7)**: Complete React Web UI Dashboard (Login, Document Upload, Search & Filters, Metadata Editor & Concurrency View, Admin Taxonomy & Metrics Dashboard, Keyboard Accessibility per `TC-UX-01`), TLS Hardening, and Development Freeze (`v1.0-freeze`).
 
 ---
 
-## 4. How to Run & Verify M5
+## 4. How to Run & Verify M6
 ```bash
 # 1. Run full test suite with coverage
 docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
 
-# 2. Run demo seed script
-docker exec aicms_backend python /app/backend/app/scripts/seed_demo.py
+# 2. Check metrics endpoint
+curl -s http://localhost:8000/metrics
 ```

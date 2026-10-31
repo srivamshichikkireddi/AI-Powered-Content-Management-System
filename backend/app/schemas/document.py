@@ -56,3 +56,11 @@ class DocumentMetadataResponse(BaseModel):
     model_version: Optional[str] = None
     revision: int
     updated_at: datetime
+
+
+class DocumentMetadataUpdate(BaseModel):
+    category_name: Optional[str] = None
+    keywords: Optional[List[str]] = None
+    topics: Optional[List[str]] = None
+    extracted_title: Optional[str] = None
+    revision: int = Field(..., description="Expected revision number for optimistic concurrency checking")
