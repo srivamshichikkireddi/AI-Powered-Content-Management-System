@@ -1,14 +1,14 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 3 / M3 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 4 / M4 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M3 (Document Intake, Validation & Deduplication)** — Completed, awaiting user confirmation to proceed to M4.
-- **Active Branch**: `feature/US-02-intake-storage`
+- **Active Milestone**: **M4 (Extraction, Metadata Parsing & AI Semantic Enrichment)** — Completed, awaiting user confirmation to proceed to M5.
+- **Active Branch**: `feature/US-03-US-04-extraction-ai`
 - **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
-- **Test Evidence**: 19 automated tests passing with 74% coverage in `evidence/TC-UP-01_02_03_04_SEC-04.txt` and `evidence/TC-UP-01_02_03_04_SEC-04_junit.xml`.
+- **Test Evidence**: 29 automated tests passing with 73% coverage in `evidence/TC-EXT-01_02_AI-01_02_03.txt` and `evidence/TC-EXT-01_02_AI-01_02_03_junit.xml`.
 
 ---
 
@@ -33,24 +33,31 @@
 - [x] Role-Based Access Control (`admin`, `editor`, `user`, `auditor`) and Audit Trail (AICMS-F-024, AICMS-SR-001, TC-ADM-03).
 
 ### Milestone 3: Document Intake, Validation & Deduplication (Checkpoint 3)
-- [x] **Multi-Format Intake (AICMS-F-001, TC-UP-01)**: PDF, DOCX, TXT accepted and queued with status `QUEUED`.
-- [x] **Size Limit Enforcement (AICMS-F-002, TC-UP-02)**: Files > 20 MB strictly rejected with `HTTP 413 Payload Too Large`.
-- [x] **SHA-256 Deduplication (AICMS-SR-004, TC-UP-03)**: Duplicate document content rejected with `HTTP 409 Conflict` referencing existing document.
-- [x] **Format Whitelist & Integrity (AICMS-F-003, TC-UP-04)**: Unsupported formats (`.csv`, `.zip`, `.py`) rejected with `HTTP 400 UNSUPPORTED_FORMAT`.
-- [x] **Magic Bytes & Disguised File Defense (AICMS-SR-002, TC-SEC-04)**: Executables (`MZ`), invalid headers, and disguised binaries rejected with `HTTP 400 INVALID_FILE_SIGNATURE`.
-- [x] **Pre-Disclosure Document Authorization (ADR-002, ADR-005)**: Direct-ID queries without permission return `404 Not Found` to prevent leaking document existence.
+- [x] Multi-format upload for PDF, DOCX, TXT with QUEUED processing state (AICMS-F-001, TC-UP-01).
+- [x] 20 MB file size limit enforcement with HTTP 413 (AICMS-F-002, TC-UP-02).
+- [x] SHA-256 duplicate detection with HTTP 409 Conflict (AICMS-SR-004, TC-UP-03).
+- [x] Format whitelist and magic bytes verification rejecting disguised binaries with HTTP 400 (AICMS-F-003, SR-002, TC-UP-04, TC-SEC-04).
+- [x] Pre-disclosure direct-ID authorization isolation returning HTTP 404 (ADR-002, ADR-005).
+
+### Milestone 4: Extraction & AI Enrichment Pipeline (Checkpoint 4)
+- [x] **Full Text Extraction (AICMS-F-005, TC-EXT-01)**: Implemented robust parsers for PDF (`pypdf`), DOCX (`python-docx`), and TXT.
+- [x] **Native Metadata Extraction (AICMS-F-006, TC-EXT-02)**: Native title, author, and creation dates parsed; missing metadata remains `None` without fabrication. Scanned blank PDFs flagged for OCR review (AICMS-F-007).
+- [x] **Semantic Vector Embeddings (AICMS-F-008, TC-AI-01)**: Generates 384-dimensional L2-normalized embeddings via `all-MiniLM-L6-v2` (with deterministic normalized vectors in CI), tracking model name and version.
+- [x] **Approved Taxonomy Categorization (AICMS-F-009, TC-AI-02)**: Automated multi-class categorization across approved taxonomy (`Engineering`, `Finance`, `Legal`, `Human Resources`, `Operations`, `General`) with calibrated confidence scores $\in [0.0, 1.0]$.
+- [x] **Keywords & Topics Extraction (AICMS-F-010, TC-AI-03)**: TF-IDF keyphrase extraction yielding 5–10 relevant keywords and topic descriptor labels.
+- [x] **Failure Injection Flags (AICMS-NF-004, NF-008)**: Tested `SIMULATE_PARSER_FAILURE=1` and `SIMULATE_MODEL_FAILURE=1`, verifying graceful document transition to `FAILED` with safe error explanations.
 - [x] **Test Verification**:
-  - 19 automated tests passing (100% pass rate) with 74% coverage.
-  - Raw evidence stored in `evidence/TC-UP-01_02_03_04_SEC-04.txt`.
+  - 29 automated tests passing (100% pass rate) with 73% coverage.
+  - Raw evidence stored in `evidence/TC-EXT-01_02_AI-01_02_03.txt`.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 4 (Checkpoint 4)**: Text Extraction (PyPDF, python-docx), AI Semantic Embeddings (`all-MiniLM-L6-v2`), Scikit-learn Categorization Classifier, TF-IDF Keyphrase/Topic Extraction, and Simulated Failure Injection Flags (`TC-EXT-01`, `TC-EXT-02`, `TC-AI-01`, `TC-AI-02`, `TC-AI-03`).
+- **Milestone 5 (Checkpoint 5)**: Vector Indexing, Natural Language Semantic Search with Cosine Distance (`<=>`), Authorization-Before-Disclosure Filter, Category/Type Filtering, Pagination, and Sprint-1 1-Min Demo Script (`TC-IDX-01`, `TC-SR-01`, `TC-SR-02`, `TC-SR-03`, `TC-SR-04`, `TC-SEC-05`, `SPRINT1_DEMO_SCRIPT.md`).
 
 ---
 
-## 4. How to Run & Verify M3
+## 4. How to Run & Verify M4
 ```bash
 # Run test suite
 docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
