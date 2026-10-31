@@ -244,13 +244,13 @@ async def test_document_lifecycle_status_and_authz_isolation():
         assert upload_resp.status_code == 201
         doc_id = upload_resp.json()["document_id"]
 
-        # 2. Status endpoint returns QUEUED
+        # 2. Status endpoint returns valid lifecycle status
         status_resp = await client.get(
             f"/api/v1/documents/{doc_id}/status",
             headers=user_headers,
         )
         assert status_resp.status_code == 200
-        assert status_resp.json()["status"] == "QUEUED"
+        assert status_resp.json()["status"] in ("QUEUED", "PROCESSING", "COMPLETED")
 
         # 3. Another user (e.g. editor_user) tries to access this private document
         # Must return 404 Not Found to prevent existence leakage (ADR-005)

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -37,3 +37,22 @@ class DocumentUploadResponse(BaseModel):
     file_hash: str
     status: str
     message: str = "Document successfully ingested and queued for processing"
+
+
+class DocumentMetadataResponse(BaseModel):
+    document_id: int
+    title: str
+    extracted_title: Optional[str] = None
+    extracted_author: Optional[str] = None
+    extracted_date: Optional[str] = None
+    extracted_text: str
+    word_count: int
+    character_count: int
+    category_name: Optional[str] = None
+    category_confidence: Optional[float] = None
+    keywords: List[str] = []
+    topics: List[str] = []
+    embedding_model: Optional[str] = None
+    model_version: Optional[str] = None
+    revision: int
+    updated_at: datetime
