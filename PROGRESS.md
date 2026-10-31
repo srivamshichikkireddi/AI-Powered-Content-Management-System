@@ -1,14 +1,14 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 1 / M1 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 2 / M2 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M1 (Scaffolding & CI Pipeline)** — Completed, awaiting user confirmation to proceed to M2.
-- **Active Branch**: `feature/M1-scaffold-ci`
+- **Active Milestone**: **M2 (Authentication, Sessions, RBAC & Lockout)** — Completed, awaiting user confirmation to proceed to M3.
+- **Active Branch**: `feature/US-01-auth-security`
 - **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
-- **Test Evidence**: 6 unit tests passing with 73% line/branch coverage in `evidence/TC-OPS-01_health_check.txt` and `evidence/TC-OPS-01_junit.xml`.
+- **Test Evidence**: 13 automated tests passing with 75% coverage in `evidence/TC-SEC-07_08_09_ADM-03.txt` and `evidence/TC-SEC-07_08_09_ADM-03_junit.xml`.
 
 ---
 
@@ -22,34 +22,37 @@
 - [x] Produced `docs/SPRINT_PLAN.md`, `docs/ASSUMPTIONS.md`, `PLAN.md`.
 
 ### Milestone 1: Scaffolding, Docker Compose & CI Workflow (Checkpoint 1)
-- [x] Full multi-service architecture scaffolded:
-  - `backend/`: FastAPI application with lifespan management, structured JSON logging with correlation ID tracing (`X-Correlation-ID`), standardized error envelopes `{code, message, correlation_id}`, database connection pooling, Celery worker entry point.
-  - `frontend/`: React 18 + Vite dashboard scaffold with Tailwind CSS.
-  - `proxy/`: Nginx reverse proxy configured for TLS termination with self-signed certificate, port 80 to 443 redirection, routing to `/api` and `/`.
-  - `docker-compose.yml`: Multi-container configuration with PostgreSQL + pgvector (`pgvector/pgvector:pg16`), Redis (`redis:7-alpine`), API, Celery worker, frontend, and proxy with health checks.
-- [x] CI/CD Workflow & Contribution Pipeline:
-  - `.github/workflows/ci.yml`: Full GitHub Actions CI pipeline running Flake8 linter, Postgres+pgvector service container, Redis service container, pytest with branch coverage, and frontend npm build.
-  - `.github/pull_request_template.md`: Requirement and TC traceability, ADR compliance, security check, and deviation notes.
-  - `.github/CODEOWNERS`: Role definitions mapping to repo owners and test leads.
-  - `docs/CONTRIBUTING.md`: Branching, PR review, and commit standards.
-  - `docs/PR_LOG.md`: Log of pull requests and stories.
-- [x] Gate Verification:
-  - `docker compose ps`: All services healthy.
-  - Health check endpoint `GET /health` verified: `{"status":"healthy","database":"connected","redis":"connected"}`.
-  - Standardized error format verified on 404: `{"code":"NOT_FOUND","message":"Not Found","correlation_id":"..."}`.
-  - Unit tests executed: 6 passed in 2.02s with 73% coverage; results saved in `evidence/TC-OPS-01_health_check.txt`.
+- [x] Multi-service architecture scaffolded: FastAPI backend, React Vite UI, Nginx TLS reverse proxy, Postgres+pgvector, Redis, and Celery.
+- [x] CI/CD pipeline (`.github/workflows/ci.yml`), PR template, CODEOWNERS, contribution guidelines.
+- [x] Baseline health endpoints verified and committed on `feature/M1-scaffold-ci`.
+
+### Milestone 2: Authentication, Sessions, RBAC & Account Lockout (Checkpoint 2)
+- [x] **Password Hashing (AICMS-SR-007, TC-SEC-07)**: Implemented bcrypt with 12 rounds and salt; plain passwords never stored or logged.
+- [x] **Account Lockout (AICMS-SR-008, TC-SEC-08)**: 5 consecutive failed login attempts trigger a 15-minute lockout; the 6th attempt returns `423 Locked` and records an audited security event.
+- [x] **Server-Side Session Store & Idle Expiry (AICMS-SR-008, TC-SEC-09)**: Opaque 256-bit cryptographically secure session tokens in database; enforced 30-minute idle inactivity timeout; `/api/v1/auth/logout` explicitly revokes session.
+- [x] **Role-Based Access Control (AICMS-F-024, TC-ADM-03)**:
+  - System roles: `admin`, `editor`, `user`, `auditor`.
+  - Initial system personas seeded on startup: `admin_user`, `editor_user`, `regular_user`, `auditor_user`.
+  - Admin-only routes (`/api/v1/users`) reject regular users with `403 Forbidden` (`FORBIDDEN_ROLE`).
+  - Auditor routes (`/api/v1/audit/logs`) restrict access to auditors and administrators.
+- [x] **Audit Trail Core (AICMS-SR-001)**: Comprehensive audit logging table capturing login successes, failures, account lockouts, session expirations, and logouts with correlation ID tracking.
+- [x] **Test Verification**:
+  - All 13 tests passed (100% pass rate) with 75% line/branch coverage.
+  - Verified live API endpoints via HTTP calls.
+  - Raw evidence stored in `evidence/TC-SEC-07_08_09_ADM-03.txt`.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 2 (Checkpoint 2)**: Authentication, User Roles (Admin, Editor, User, Auditor), DB Session Store, 30-min idle timeout, 5-failure lockout (SR-008), and audit logging foundation (`TC-SEC-07`, `TC-SEC-08`, `TC-SEC-09`, `TC-ADM-03`).
+- **Milestone 3 (Checkpoint 3)**: Document Intake, Multi-Format Validation (PDF/DOCX/TXT $\le$ 20MB), Extension + Magic Bytes Inspection, SHA-256 Deduplication (409 Conflict), and Queue Status Tracking (`TC-UP-01`, `TC-UP-02`, `TC-UP-03`, `TC-UP-04`, `TC-SEC-04`).
 
 ---
 
-## 4. How to Run (Current State)
-- **Start Docker stack**: `docker compose up -d`
-- **Check container status**: `docker compose ps`
-- **Verify health endpoint**: `curl http://localhost:8000/health` (or `http://localhost:8000/`)
-- **Run backend test suite**: `docker exec aicms_backend pytest /app/backend/tests/unit -v --cov=/app/backend/app --cov-branch --cov-report=term-missing`
-- **Open Frontend**: `http://localhost:5173`
-- **Open API Docs**: `http://localhost:8000/docs`
+## 4. How to Run & Verify M2
+```bash
+# Run test suite
+docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
+
+# Test login API with admin user
+curl -X POST http://localhost:8000/api/v1/auth/login -H "Content-Type: application/json" -d '{"username":"admin_user","password":"AdminPass123!"}'
+```

@@ -4,8 +4,8 @@ This log tracks all pull requests prepared for the project, detailing the branch
 
 | PR # | Branch | User Story / Milestone | Assignee | Reviewer | Status | Merged Commit |
 |---|---|---|---|---|---|---|
-| PR-01 | `feature/M1-scaffold-ci` | M1: Scaffolding, Docker Compose, CI & Base Health | Srivamshi Chikkireddi | Shreeverdhan M | Pending Review | — |
-| PR-02 | `feature/US-01-auth-security` | M2: Auth, Sessions, RBAC & Lockout | Srivamshi Chikkireddi | Shreeverdhan M | Planned | — |
+| PR-01 | `feature/M1-scaffold-ci` | M1: Scaffolding, Docker Compose, CI & Base Health | Srivamshi Chikkireddi | Shreeverdhan M | Ready to Merge | 26adbab |
+| PR-02 | `feature/US-01-auth-security` | M2: Auth, Sessions, RBAC & Lockout | Srivamshi Chikkireddi | Shreeverdhan M | Ready to Merge | pending |
 | PR-03 | `feature/US-02-intake-storage` | M3: Document Intake, Deduplication & Validation | Srivamshi Chikkireddi | Sripada Aditya | Planned | — |
 | PR-04 | `feature/US-03-US-04-extraction-ai` | M4: Parsing & AI Semantic Enrichment | Shreeverdhan M | Srivamshi Chikkireddi | Planned | — |
 | PR-05 | `feature/US-05-vector-search` | M5: Semantic Search & Pre-disclosure Authz | Srivamshi Chikkireddi | Shamanth SK | Planned | — |
