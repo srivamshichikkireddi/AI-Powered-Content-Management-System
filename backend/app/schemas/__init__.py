@@ -8,6 +8,7 @@ from backend.app.schemas.document import (
     DocumentUploadResponse,
     DocumentMetadataResponse,
 )
+from backend.app.schemas.search import SearchResultItem, SearchResultResponse
 
 __all__ = [
     "ErrorResponse",
@@ -23,4 +24,6 @@ __all__ = [
     "DocumentStatusResponse",
     "DocumentUploadResponse",
     "DocumentMetadataResponse",
+    "SearchResultItem",
+    "SearchResultResponse",
 ]

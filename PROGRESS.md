@@ -1,14 +1,14 @@
 # AICMS Project Progress & Execution Log
 
-**Last Updated**: 2026-10-31 (Checkpoint 4 / M4 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 5 / M5 Completed)
 
 ---
 
 ## 1. Current State
-- **Active Milestone**: **M4 (Extraction, Metadata Parsing & AI Semantic Enrichment)** — Completed, awaiting user confirmation to proceed to M5.
-- **Active Branch**: `feature/US-03-US-04-extraction-ai`
+- **Active Milestone**: **M5 (Vector Indexing & Semantic Search Engine)** — Completed, awaiting user confirmation to proceed to M6.
+- **Active Branch**: `feature/US-05-vector-search`
 - **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
-- **Test Evidence**: 29 automated tests passing with 73% coverage in `evidence/TC-EXT-01_02_AI-01_02_03.txt` and `evidence/TC-EXT-01_02_AI-01_02_03_junit.xml`.
+- **Test Evidence**: 34 automated tests passing (100% pass rate) with 72% coverage in `evidence/TC-IDX-01_SR-01_04_SEC-05.txt` and `evidence/TC-IDX-01_SR-01_04_SEC-05_junit.xml`.
 
 ---
 
@@ -46,19 +46,29 @@
 - [x] **Approved Taxonomy Categorization (AICMS-F-009, TC-AI-02)**: Automated multi-class categorization across approved taxonomy (`Engineering`, `Finance`, `Legal`, `Human Resources`, `Operations`, `General`) with calibrated confidence scores $\in [0.0, 1.0]$.
 - [x] **Keywords & Topics Extraction (AICMS-F-010, TC-AI-03)**: TF-IDF keyphrase extraction yielding 5–10 relevant keywords and topic descriptor labels.
 - [x] **Failure Injection Flags (AICMS-NF-004, NF-008)**: Tested `SIMULATE_PARSER_FAILURE=1` and `SIMULATE_MODEL_FAILURE=1`, verifying graceful document transition to `FAILED` with safe error explanations.
+
+### Milestone 5: Vector Indexing & Semantic Search Engine (Checkpoint 5)
+- [x] **Dense Vector Indexing & Cosine Distance Retrieval (AICMS-F-011, AICMS-F-013, TC-IDX-01, TC-SR-01)**: pgvector `<=>` cosine distance ranking with L2-normalized 384-d semantic vectors and contextual snippet extraction around query matches.
+- [x] **Metadata Filters & Pagination (AICMS-F-014, TC-SR-02, TC-SR-04)**: Category and file-type query parameter filters, with pagination (`limit`, `offset`) and total accessible hit counting.
+- [x] **Authorization-Before-Disclosure (AICMS-SR-005, TC-SEC-05, ADR-002)**: Search engine filters out unauthorized documents at query time before relevance scoring or metadata disclosure, preventing any information leakage.
+- [x] **Graceful Empty & No-Result States (AICMS-F-012, TC-SR-03)**: Clean empty search handling without errors.
+- [x] **Seed Data & Demo Walkthrough Script**: Created `seed_demo.py` and `docs/demo/SPRINT1_DEMO_SCRIPT.md` (60-second video demo walkthrough script matching sprint goals).
 - [x] **Test Verification**:
-  - 29 automated tests passing (100% pass rate) with 73% coverage.
-  - Raw evidence stored in `evidence/TC-EXT-01_02_AI-01_02_03.txt`.
+  - 34 automated tests passing (100% pass rate) with 72% overall codebase line coverage.
+  - Raw evidence stored in `evidence/TC-IDX-01_SR-01_04_SEC-05.txt` and JUnit XML `evidence/TC-IDX-01_SR-01_04_SEC-05_junit.xml`.
 
 ---
 
 ## 3. Next Milestone
-- **Milestone 5 (Checkpoint 5)**: Vector Indexing, Natural Language Semantic Search with Cosine Distance (`<=>`), Authorization-Before-Disclosure Filter, Category/Type Filtering, Pagination, and Sprint-1 1-Min Demo Script (`TC-IDX-01`, `TC-SR-01`, `TC-SR-02`, `TC-SR-03`, `TC-SR-04`, `TC-SEC-05`, `SPRINT1_DEMO_SCRIPT.md`).
+- **Milestone 6 (Checkpoint 6)**: Metadata Management, Revision Tracking, Taxonomy Admin, Deletion & Purge, and Metrics Monitoring (`AICMS-F-016..022`, `AICMS-NF-005..007`, `TC-MD-01`, `TC-ADM-01..02`, `TC-DATA-01..02`, `TC-SEC-02`, `TC-OPS-02..03`).
 
 ---
 
-## 4. How to Run & Verify M4
+## 4. How to Run & Verify M5
 ```bash
-# Run test suite
+# 1. Run full test suite with coverage
 docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
+
+# 2. Run demo seed script
+docker exec aicms_backend python /app/backend/app/scripts/seed_demo.py
 ```

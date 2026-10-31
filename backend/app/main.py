@@ -11,6 +11,7 @@ from backend.app.api.audit import router as audit_router
 from backend.app.api.auth import router as auth_router
 from backend.app.api.documents import router as documents_router
 from backend.app.api.health import router as health_router
+from backend.app.api.search import router as search_router
 from backend.app.api.users import router as users_router
 from backend.app.core.config import settings
 from backend.app.core.database import AsyncSessionLocal, Base, engine
@@ -95,6 +96,7 @@ app.include_router(health_router, prefix="", tags=["Health"])
 app.include_router(health_router, prefix=settings.API_V1_STR, tags=["Health"])
 app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(documents_router, prefix=settings.API_V1_STR)
+app.include_router(search_router, prefix=settings.API_V1_STR)
 app.include_router(users_router, prefix=settings.API_V1_STR)
 app.include_router(audit_router, prefix=settings.API_V1_STR)
 
