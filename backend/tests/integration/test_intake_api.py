@@ -12,6 +12,7 @@ from backend.app.services.auth_service import seed_initial_users
 async def setup_database():
     """Ensure tables exist and seed initial personas."""
     async with engine.begin() as conn:
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.run_sync(Base.metadata.create_all)
     async with AsyncSessionLocal() as session:
         await seed_initial_users(session)

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import pytest
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy import select
+from sqlalchemy import text, select
 
 from backend.app.core.database import AsyncSessionLocal, Base, engine
 from backend.app.main import app
@@ -14,6 +14,7 @@ from backend.app.services.auth_service import seed_initial_users
 async def setup_database():
     """Ensure tables exist and seed initial personas once for session."""
     async with engine.begin() as conn:
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.run_sync(Base.metadata.create_all)
     async with AsyncSessionLocal() as session:
         await seed_initial_users(session)
