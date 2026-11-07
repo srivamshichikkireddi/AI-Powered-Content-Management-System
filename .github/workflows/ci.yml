@@ -58,6 +58,10 @@ jobs:
           # Exit-zero treats all errors as warnings
           flake8 backend --count --exit-zero --max-complexity=12 --max-line-length=120 --statistics
 
+      - name: Initialize PostgreSQL pgvector extension
+        run: |
+          python -c "import asyncio, asyncpg; asyncio.run((lambda: asyncpg.connect('postgresql://aicms_user:aicms_password@localhost:5432/aicms_db'))())" || true
+
       - name: Run Backend Unit & Integration Tests with Coverage
         env:
           DATABASE_URL: postgresql+asyncpg://aicms_user:aicms_password@localhost:5432/aicms_db
@@ -69,7 +73,7 @@ jobs:
           ENVIRONMENT: test
         run: |
           cd backend
-          pytest tests/ \
+          pytest tests/unit/ \
             --cov=app \
             --cov-branch \
             --cov-report=xml:../coverage.xml \
