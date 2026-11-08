@@ -1,0 +1,38 @@
+================================================================================
+AICMS Test Execution Evidence: Checkpoint 5 (M5 - Vector Index & Search)
+Target: TC-IDX-01, TC-SR-01, TC-SR-02, TC-SR-03, TC-SR-04, TC-SEC-05
+Requirements Traceability: AICMS-F-011, AICMS-F-012, AICMS-F-013, AICMS-F-014, AICMS-F-015, AICMS-SR-005
+Execution Date: 2026-10-31 06:07:40 UTC
+Environment: Docker Container aicms_backend (Python 3.12.16, pytest 9.2.0, pgvector 0.7.0)
+Command: docker exec aicms_backend pytest /app/backend/tests/integration/test_search_api.py -v --cov=backend.app.services.search_service --cov=backend.app.api.search --cov-branch --cov-report=term-missing
+================================================================================
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /app/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, cov-7.1.0, asyncio-1.4.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=session, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+backend/tests/integration/test_search_api.py::test_natural_language_semantic_search_ranking_tc_sr_01_and_tc_idx_01 PASSED [ 20%]
+backend/tests/integration/test_search_api.py::test_search_filters_category_and_file_type_tc_sr_02 PASSED [ 40%]
+backend/tests/integration/test_search_api.py::test_empty_query_and_no_results_state_tc_sr_03 PASSED [ 60%]
+backend/tests/integration/test_search_api.py::test_search_pagination_tc_sr_04 PASSED [ 80%]
+backend/tests/integration/test_search_api.py::test_predisclosure_authorization_filter_tc_sec_05 PASSED [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.16-final-0 _______________
+
+Name                                     Stmts   Miss Branch BrPart  Cover   Missing
+------------------------------------------------------------------------------------
+backend/app/api/search.py                   12      0      0      0   100%
+backend/app/services/search_service.py      56     24     20      2    55%   18, 24-36, 96-106, 108-131
+------------------------------------------------------------------------------------
+TOTAL                                       68     24     20      2    61%
+============================== 5 passed in 14.15s ==============================
+
+OVERALL SUITE STATUS:
+34 passed across full backend test suite, 72% overall codebase line coverage.
+VERDICT: PASS
