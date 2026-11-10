@@ -1,0 +1,13 @@
+# Codeowners for AICMS Repository
+# Default owners for all files
+* @Srivamshi-Chikkireddi
+
+# Backend and database infrastructure
+/backend/ @Srivamshi-Chikkireddi @Shreeverdhan-M
+
+# Frontend UI
+/frontend/ @Shamanth-SK
+
+# Tests and QA documentation
+/docs/reports/ @Shreeverdhan-M @Sripada-Krishna-Sameer-Aditya
+/evidence/ @Shreeverdhan-M @Sripada-Krishna-Sameer-Aditya
