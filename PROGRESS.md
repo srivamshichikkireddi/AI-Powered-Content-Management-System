@@ -1,6 +1,7 @@
 # AICMS Project Progress & Execution Log
 
 **Last Updated**: 2026-10-31 (Checkpoint 8 / M8 Completed)
+**Last Updated**: 2026-10-31 (Checkpoint 4 / M4 Completed)
 
 ---
 
@@ -13,6 +14,10 @@
   - `evidence/TC-AI-04_categorization_benchmark.txt` and `evidence/TC-AI-04_junit.xml`
   - `evidence/TC-PERF-01_02_03_performance_benchmarks.txt` and `evidence/TC-PERF-01_02_03_junit.xml`
   - `evidence/TC-OPS-03_availability_benchmark.txt` and `evidence/TC-OPS-03_junit.xml`
+- **Active Milestone**: **M4 (Extraction, Metadata Parsing & AI Semantic Enrichment)** — Completed, awaiting user confirmation to proceed to M5.
+- **Active Branch**: `feature/US-03-US-04-extraction-ai`
+- **Docker Status**: All containers healthy and running (`aicms_db`, `aicms_redis`, `aicms_backend`, `aicms_worker`, `aicms_frontend`).
+- **Test Evidence**: 29 automated tests passing with 73% coverage in `evidence/TC-EXT-01_02_AI-01_02_03.txt` and `evidence/TC-EXT-01_02_AI-01_02_03_junit.xml`.
 
 ---
 
@@ -92,6 +97,9 @@
   - Precision@5: **95.00%** (target $\ge 80.0\%$), Mean Reciprocal Rank (MRR): **0.7533**.
 - [x] **Service Availability & Reliability Analysis (`TC-OPS-03`, `AICMS-NF-002`)**:
   - Verified operational telemetry: **100.00% availability** exceeding the $\ge 99.50\%$ monthly SLA target.
+- [x] **Test Verification**:
+  - 29 automated tests passing (100% pass rate) with 73% coverage.
+  - Raw evidence stored in `evidence/TC-EXT-01_02_AI-01_02_03.txt`.
 
 ---
 
@@ -106,5 +114,12 @@
 docker exec aicms_backend pytest /app/backend/tests/benchmarks -v -s
 
 # 2. Run entire test suite (47 tests) with coverage
+- **Milestone 5 (Checkpoint 5)**: Vector Indexing, Natural Language Semantic Search with Cosine Distance (`<=>`), Authorization-Before-Disclosure Filter, Category/Type Filtering, Pagination, and Sprint-1 1-Min Demo Script (`TC-IDX-01`, `TC-SR-01`, `TC-SR-02`, `TC-SR-03`, `TC-SR-04`, `TC-SEC-05`, `SPRINT1_DEMO_SCRIPT.md`).
+
+---
+
+## 4. How to Run & Verify M4
+```bash
+# Run test suite
 docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
 ```
