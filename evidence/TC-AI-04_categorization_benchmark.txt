@@ -1,0 +1,57 @@
+================================================================================
+AICMS Benchmark Execution Evidence: Checkpoint 8 (M8 - Quantitative Benchmarking)
+Target: TC-AI-04 (Categorization Accuracy on Held-Out Labelled Test Corpus)
+Requirements Traceability: AICMS-F-008, AICMS-NF-009
+Execution Date: 2026-10-31 06:49:03 UTC
+Environment: Docker Container aicms_backend (Python 3.12.16, pytest 9.2.0, scikit-learn 1.4.1)
+Command: docker exec aicms_backend pytest /app/backend/tests/benchmarks/test_ai_benchmark_tc_ai_04.py -v -s
+================================================================================
+
+======================================================================
+[TC-AI-04] AI Categorization Accuracy Benchmark
+Evaluated on 30 reviewed documents
+======================================================================
+[✓] ENG_01   GroundTruth: Engineering      Predicted: Engineering      Conf: 0.55
+[✓] ENG_02   GroundTruth: Engineering      Predicted: Engineering      Conf: 0.55
+[✓] ENG_03   GroundTruth: Engineering      Predicted: Engineering      Conf: 0.55
+[✓] ENG_04   GroundTruth: Engineering      Predicted: Engineering      Conf: 0.55
+[✗] ENG_05   GroundTruth: Engineering      Predicted: General          Conf: 0.55
+[✓] FIN_01   GroundTruth: Finance          Predicted: Finance          Conf: 0.98
+[✓] FIN_02   GroundTruth: Finance          Predicted: Finance          Conf: 0.57
+[✓] FIN_03   GroundTruth: Finance          Predicted: Finance          Conf: 0.55
+[✓] FIN_04   GroundTruth: Finance          Predicted: Finance          Conf: 0.55
+[✓] FIN_05   GroundTruth: Finance          Predicted: Finance          Conf: 0.71
+[✓] LEG_01   GroundTruth: Legal            Predicted: Legal            Conf: 0.76
+[✓] LEG_02   GroundTruth: Legal            Predicted: Legal            Conf: 0.62
+[✓] LEG_03   GroundTruth: Legal            Predicted: Legal            Conf: 0.69
+[✓] LEG_04   GroundTruth: Legal            Predicted: Legal            Conf: 0.55
+[✓] LEG_05   GroundTruth: Legal            Predicted: Legal            Conf: 0.55
+[✓] HR_01    GroundTruth: Human Resources  Predicted: Human Resources  Conf: 0.59
+[✓] HR_02    GroundTruth: Human Resources  Predicted: Human Resources  Conf: 0.64
+[✓] HR_03    GroundTruth: Human Resources  Predicted: Human Resources  Conf: 0.74
+[✓] HR_04    GroundTruth: Human Resources  Predicted: Human Resources  Conf: 0.55
+[✓] HR_05    GroundTruth: Human Resources  Predicted: Human Resources  Conf: 0.59
+[✓] OPS_01   GroundTruth: Operations       Predicted: Operations       Conf: 0.79
+[✓] OPS_02   GroundTruth: Operations       Predicted: Operations       Conf: 0.55
+[✓] OPS_03   GroundTruth: Operations       Predicted: Operations       Conf: 0.55
+[✓] OPS_04   GroundTruth: Operations       Predicted: Operations       Conf: 0.55
+[✓] OPS_05   GroundTruth: Operations       Predicted: Operations       Conf: 0.55
+[✓] GEN_01   GroundTruth: General          Predicted: General          Conf: 0.94
+[✓] GEN_02   GroundTruth: General          Predicted: General          Conf: 0.55
+[✓] GEN_03   GroundTruth: General          Predicted: General          Conf: 0.55
+[✓] GEN_04   GroundTruth: General          Predicted: General          Conf: 0.55
+[✓] GEN_05   GroundTruth: General          Predicted: General          Conf: 0.98
+
+----------------------------------------------------------------------
+Per-Category Accuracy Breakdown:
+  - Engineering       : 4/5 (80.0%) | Avg Confidence: 0.55
+  - Finance           : 5/5 (100.0%) | Avg Confidence: 0.67
+  - Legal             : 5/5 (100.0%) | Avg Confidence: 0.64
+  - Human Resources   : 5/5 (100.0%) | Avg Confidence: 0.62
+  - Operations        : 5/5 (100.0%) | Avg Confidence: 0.60
+  - General           : 5/5 (100.0%) | Avg Confidence: 0.71
+----------------------------------------------------------------------
+OVERALL TOP-1 ACCURACY: 29/30 (96.67%)
+TARGET REQUIREMENT:     >= 80.00% (AICMS-NF-009)
+BENCHMARK STATUS:       PASS
+VERDICT: PASS

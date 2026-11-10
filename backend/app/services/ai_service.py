@@ -32,13 +32,21 @@ def generate_embedding(text: str) -> List[float]:
         )
 
     if settings.EMBEDDER == "stub":
-        # Deterministic 384-dimensional unit vector seeded by text content
-        hasher = hashlib.sha256(text.encode("utf-8")).digest()
-        seed = int.from_bytes(hasher[:8], "big")
-        rng = random.Random(seed)
-        vec = [rng.gauss(0.0, 1.0) for _ in range(384)]
-        norm = math.sqrt(sum(x * x for x in vec)) or 1.0
-        return [float(x / norm) for x in vec]
+        # Deterministic 384-dimensional unit vector with word-level hashing
+        words = re.findall(r"\w+", text.lower())
+        if not words:
+            words = [text.strip() or "empty"]
+        combined = [0.0] * 384
+        for w in set(words):
+            hasher = hashlib.sha256(w.encode("utf-8")).digest()
+            seed = int.from_bytes(hasher[:8], "big")
+            rng = random.Random(seed)
+            w_vec = [rng.gauss(0.0, 1.0) for _ in range(384)]
+            w_norm = math.sqrt(sum(x * x for x in w_vec)) or 1.0
+            for i in range(384):
+                combined[i] += w_vec[i] / w_norm
+        norm = math.sqrt(sum(x * x for x in combined)) or 1.0
+        return [float(x / norm) for x in combined]
 
     try:
         from sentence_transformers import SentenceTransformer
@@ -47,12 +55,20 @@ def generate_embedding(text: str) -> List[float]:
         return [float(x) for x in embedding]
     except Exception as e:
         # Graceful fallback to deterministic embedder if weights unavailable
-        hasher = hashlib.sha256(text.encode("utf-8")).digest()
-        seed = int.from_bytes(hasher[:8], "big")
-        rng = random.Random(seed)
-        vec = [rng.gauss(0.0, 1.0) for _ in range(384)]
-        norm = math.sqrt(sum(x * x for x in vec)) or 1.0
-        return [float(x / norm) for x in vec]
+        words = re.findall(r"\w+", text.lower())
+        if not words:
+            words = [text.strip() or "empty"]
+        combined = [0.0] * 384
+        for w in set(words):
+            hasher = hashlib.sha256(w.encode("utf-8")).digest()
+            seed = int.from_bytes(hasher[:8], "big")
+            rng = random.Random(seed)
+            w_vec = [rng.gauss(0.0, 1.0) for _ in range(384)]
+            w_norm = math.sqrt(sum(x * x for x in w_vec)) or 1.0
+            for i in range(384):
+                combined[i] += w_vec[i] / w_norm
+        norm = math.sqrt(sum(x * x for x in combined)) or 1.0
+        return [float(x / norm) for x in combined]
 
 
 def classify_category(text: str) -> Tuple[str, float]:

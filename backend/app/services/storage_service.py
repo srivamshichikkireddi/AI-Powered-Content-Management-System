@@ -68,6 +68,19 @@ def validate_file_signature(content: bytes, ext: str) -> None:
             )
 
 
+def remove_storage_file(storage_path: str) -> bool:
+    """
+    Delete physical file from disk storage if it exists (AICMS-F-021, TC-DATA-01).
+    """
+    try:
+        if storage_path and os.path.exists(storage_path):
+            os.remove(storage_path)
+            return True
+    except OSError:
+        pass
+    return False
+
+
 async def ingest_document(
     db: AsyncSession,
     file: UploadFile,
