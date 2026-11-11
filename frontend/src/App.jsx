@@ -101,13 +101,15 @@ export default function App() {
         throw new Error(err.message || 'Login failed');
       }
       const data = await res.json();
+      const userRole = data.user ? data.user.role : (data.role || "user");
       const userObj = {
-        username: data.username,
-        role: data.role,
+        id: data.user ? data.user.id : null,
+        username: data.user ? data.user.username : username,
+        role: userRole,
         token: data.access_token,
       };
       setCurrentUser(userObj);
-      showNotification('success', `Logged in as ${username} (${data.role.toUpperCase()})`);
+      showNotification("success", `Logged in as ${username} (${userRole.toUpperCase()})`);
     } catch (err) {
       showNotification('error', `Authentication error: ${err.message}`);
     }
@@ -1115,7 +1117,7 @@ export default function App() {
                 <tbody className="divide-y divide-slate-800 text-xs">
                   {auditLogs.map((log) => (
                     <tr key={log.id} className="hover:bg-slate-800/40">
-                      <td className="px-4 py-2.5 font-mono text-slate-400">{new Date(log.created_at).toLocaleTimeString()}</td>
+                      <td className="px-4 py-2.5 font-mono text-slate-400">{new Date(log.timestamp || log.created_at).toLocaleString()}</td>
                       <td className="px-4 py-2.5 font-semibold text-indigo-300">{log.event_type}</td>
                       <td className="px-4 py-2.5 text-slate-200">{log.username || 'System'}</td>
                       <td className="px-4 py-2.5">
