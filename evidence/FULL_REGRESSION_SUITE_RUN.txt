@@ -1,0 +1,64 @@
+﻿============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /app/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, cov-7.1.0, asyncio-1.4.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=session, asyncio_default_test_loop_scope=function
+collecting ... collected 47 items
+
+backend/tests/benchmarks/test_ai_benchmark_tc_ai_04.py::test_ai_categorization_accuracy_benchmark_tc_ai_04 PASSED [  2%]
+backend/tests/benchmarks/test_availability_tc_ops_03.py::test_service_availability_calculation_tc_ops_03 PASSED [  4%]
+backend/tests/benchmarks/test_ir_relevance_benchmark.py::test_search_relevance_precision_at_5_benchmark PASSED [  6%]
+backend/tests/benchmarks/test_perf_async_concurrency_tc_perf_02.py::test_async_pipeline_nonblocking_concurrency_tc_perf_02 PASSED [  8%]
+backend/tests/benchmarks/test_perf_end_to_end_tc_perf_03.py::test_ten_page_document_processing_time_tc_perf_03 PASSED [ 10%]
+backend/tests/benchmarks/test_perf_search_tc_perf_01.py::test_search_latency_p90_benchmark_tc_perf_01 PASSED [ 12%]
+backend/tests/integration/test_auth_api.py::test_login_success_and_profile PASSED [ 14%]
+backend/tests/integration/test_auth_api.py::test_account_lockout_after_5_failed_attempts_tc_sec_08 PASSED [ 17%]
+backend/tests/integration/test_auth_api.py::test_logout_invalidates_session_tc_sec_09 PASSED [ 19%]
+backend/tests/integration/test_auth_api.py::test_session_idle_timeout_tc_sec_09 PASSED [ 21%]
+backend/tests/integration/test_auth_api.py::test_role_based_access_control_tc_adm_03 PASSED [ 23%]
+backend/tests/integration/test_intake_api.py::test_upload_supported_formats_tc_up_01 PASSED [ 25%]
+backend/tests/integration/test_intake_api.py::test_file_size_limit_rejection_tc_up_02 PASSED [ 27%]
+backend/tests/integration/test_intake_api.py::test_duplicate_document_rejection_tc_up_03 PASSED [ 29%]
+backend/tests/integration/test_intake_api.py::test_unsupported_format_rejection_tc_up_04 PASSED [ 31%]
+backend/tests/integration/test_intake_api.py::test_disguised_malicious_file_rejection_tc_sec_04 PASSED [ 34%]
+backend/tests/integration/test_intake_api.py::test_document_lifecycle_status_and_authz_isolation PASSED [ 36%]
+backend/tests/integration/test_metadata_admin_api.py::test_metadata_correction_and_concurrency_tc_md_01 PASSED [ 38%]
+backend/tests/integration/test_metadata_admin_api.py::test_taxonomy_administration_rbac_and_integrity_tc_adm_01 PASSED [ 40%]
+backend/tests/integration/test_metadata_admin_api.py::test_admin_reindexing_job_tc_adm_02 PASSED [ 42%]
+backend/tests/integration/test_metadata_admin_api.py::test_document_deletion_and_vector_purge_tc_data_01_and_02 PASSED [ 44%]
+backend/tests/integration/test_metadata_admin_api.py::test_operational_metrics_and_availability_tc_ops_02_and_03 PASSED [ 46%]
+backend/tests/integration/test_pipeline_api.py::test_end_to_end_pipeline_success PASSED [ 48%]
+backend/tests/integration/test_pipeline_api.py::test_pipeline_failure_transitions_to_failed_state PASSED [ 51%]
+backend/tests/integration/test_search_api.py::test_natural_language_semantic_search_ranking_tc_sr_01_and_tc_idx_01 PASSED [ 53%]
+backend/tests/integration/test_search_api.py::test_search_filters_category_and_file_type_tc_sr_02 PASSED [ 55%]
+backend/tests/integration/test_search_api.py::test_empty_query_and_no_results_state_tc_sr_03 PASSED [ 57%]
+backend/tests/integration/test_search_api.py::test_search_pagination_tc_sr_04 PASSED [ 59%]
+backend/tests/integration/test_search_api.py::test_predisclosure_authorization_filter_tc_sec_05 PASSED [ 61%]
+backend/tests/unit/test_ai_enrichment.py::test_embedding_dimensions_and_norm_tc_ai_01 PASSED [ 63%]
+backend/tests/unit/test_ai_enrichment.py::test_category_classification_confidence_tc_ai_02 PASSED [ 65%]
+backend/tests/unit/test_ai_enrichment.py::test_keyword_and_topic_extraction_tc_ai_03 PASSED [ 68%]
+backend/tests/unit/test_ai_enrichment.py::test_simulate_model_failure_flag PASSED [ 70%]
+backend/tests/unit/test_config.py::test_settings_defaults PASSED         [ 72%]
+backend/tests/unit/test_config.py::test_structured_logging_redacts_sensitive_keys PASSED [ 74%]
+backend/tests/unit/test_extraction.py::test_txt_extraction_tc_ext_01 PASSED [ 76%]
+backend/tests/unit/test_extraction.py::test_docx_extraction_and_metadata_tc_ext_01_02 PASSED [ 78%]
+backend/tests/unit/test_extraction.py::test_pdf_extraction_and_metadata_tc_ext_01_02 PASSED [ 80%]
+backend/tests/unit/test_extraction.py::test_simulate_parser_failure_flag PASSED [ 82%]
+backend/tests/unit/test_health.py::test_root_endpoint PASSED             [ 85%]
+backend/tests/unit/test_health.py::test_health_endpoint PASSED           [ 87%]
+backend/tests/unit/test_health.py::test_health_degraded_when_service_down PASSED [ 89%]
+backend/tests/unit/test_health.py::test_standardized_error_format_404 PASSED [ 91%]
+backend/tests/unit/test_security.py::test_password_hashing_bcrypt_tc_sec_07 PASSED [ 93%]
+backend/tests/unit/test_security.py::test_session_token_generation_entropy PASSED [ 95%]
+backend/tests/unit/test_security_and_ux.py::test_tls_enforcement_and_redirect_tc_sec_03 PASSED [ 97%]
+backend/tests/unit/test_security_and_ux.py::test_ui_portal_and_accessibility_tc_ux_01 PASSED [100%]
+
+--------- generated xml file: /app/evidence/full_regression_junit.xml ----------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.16-final-0 _______________
+
+Coverage HTML written to dir /app/evidence/htmlcov
+Coverage XML written to file /app/evidence/coverage.xml
+============================= 47 passed in 45.17s ==============================

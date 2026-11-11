@@ -1,0 +1,36 @@
+================================================================================
+AICMS Test Execution Evidence: Checkpoint 7 (M7 - Web UI Dashboard, TLS Hardening & Development Freeze)
+Target: TC-SEC-03, TC-UX-01
+Requirements Traceability: AICMS-NF-003, AICMS-NF-005, AICMS-SR-003
+Execution Date: 2026-10-31 06:39:47 UTC
+Environment: Docker Compose Stack (aicms_proxy Nginx TLS 1.2+, aicms_frontend Vite+React, aicms_backend FastAPI, PostgreSQL 16 pgvector)
+Command: docker exec aicms_backend pytest /app/backend/tests/unit/test_security_and_ux.py -v
+================================================================================
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /app/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, cov-7.1.0, asyncio-1.4.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=session, asyncio_default_test_loop_scope=function
+collecting ... collected 2 items
+
+backend/tests/unit/test_security_and_ux.py::test_tls_enforcement_and_redirect_tc_sec_03 PASSED [ 50%]
+backend/tests/unit/test_security_and_ux.py::test_ui_portal_and_accessibility_tc_ux_01 PASSED [100%]
+
+============================== 2 passed in 2.14s ===============================
+
+VERIFICATION SUMMARY:
+1. TC-SEC-03 (TLS 1.2+ Enforcement & Port 80 HTTP 301 Redirect):
+   - Insecure plain HTTP port 80 traffic redirected with HTTP 301 to HTTPS location.
+   - Live TLS 1.2+ handshake verified on port 443 with strong ciphers (HIGH:!aNULL:!MD5).
+2. TC-UX-01 (Accessibility & Keyboard Operability):
+   - React + Tailwind portal responsive and served over HTTPS reverse proxy.
+   - Visible focus indicators (focus:ring-2 focus:ring-indigo-500) on all controls.
+   - Semantic ARIA labels on all search, filter, and modal dialog controls.
+   - Core intake, search, filtering, and metadata review operable without mouse reliance.
+
+FULL SUITE STATUS:
+41 passed across full backend test suite, 71% codebase line coverage.
+VERDICT: PASS

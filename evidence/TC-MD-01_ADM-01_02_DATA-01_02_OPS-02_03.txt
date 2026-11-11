@@ -1,0 +1,115 @@
+================================================================================
+AICMS Test Execution Evidence: Checkpoint 6 (M6 - Metadata, Admin Taxonomy, Deletion & Purge, Metrics)
+Target: TC-MD-01, TC-ADM-01, TC-ADM-02, TC-DATA-01, TC-DATA-02, TC-OPS-02, TC-OPS-03, TC-SEC-02
+Requirements Traceability: AICMS-F-016, AICMS-F-018, AICMS-F-019, AICMS-F-020, AICMS-F-021, AICMS-F-022, AICMS-NF-002, AICMS-NF-005, AICMS-NF-007, AICMS-SR-001, AICMS-SR-006
+Execution Date: 2026-10-31 06:17:57 UTC
+Environment: Docker Container aicms_backend (Python 3.12.16, pytest 9.2.0, pgvector 0.7.0, PostgreSQL 16)
+Command: docker exec aicms_backend pytest /app/backend/tests -v --cov=/app/backend/app --cov-branch --cov-report=term-missing
+================================================================================
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /app/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, cov-7.1.0, asyncio-1.4.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=session, asyncio_default_test_loop_scope=function
+collecting ... collected 39 items
+
+backend/tests/integration/test_auth_api.py::test_login_success_and_profile PASSED [  2%]
+backend/tests/integration/test_auth_api.py::test_account_lockout_after_5_failed_attempts_tc_sec_08 PASSED [  5%]
+backend/tests/integration/test_auth_api.py::test_logout_invalidates_session_tc_sec_09 PASSED [  7%]
+backend/tests/integration/test_auth_api.py::test_session_idle_timeout_tc_sec_09 PASSED [ 10%]
+backend/tests/integration/test_auth_api.py::test_role_based_access_control_tc_adm_03 PASSED [ 12%]
+backend/tests/integration/test_intake_api.py::test_upload_supported_formats_tc_up_01 PASSED [ 15%]
+backend/tests/integration/test_intake_api.py::test_file_size_limit_rejection_tc_up_02 PASSED [ 17%]
+backend/tests/integration/test_intake_api.py::test_duplicate_document_rejection_tc_up_03 PASSED [ 20%]
+backend/tests/integration/test_intake_api.py::test_unsupported_format_rejection_tc_up_04 PASSED [ 23%]
+backend/tests/integration/test_intake_api.py::test_disguised_malicious_file_rejection_tc_sec_04 PASSED [ 25%]
+backend/tests/integration/test_intake_api.py::test_document_lifecycle_status_and_authz_isolation PASSED [ 28%]
+backend/tests/integration/test_metadata_admin_api.py::test_metadata_correction_and_concurrency_tc_md_01 PASSED [ 30%]
+backend/tests/integration/test_metadata_admin_api.py::test_taxonomy_administration_rbac_and_integrity_tc_adm_01 PASSED [ 33%]
+backend/tests/integration/test_metadata_admin_api.py::test_admin_reindexing_job_tc_adm_02 PASSED [ 35%]
+backend/tests/integration/test_metadata_admin_api.py::test_document_deletion_and_vector_purge_tc_data_01_and_02 PASSED [ 38%]
+backend/tests/integration/test_metadata_admin_api.py::test_operational_metrics_and_availability_tc_ops_02_and_03 PASSED [ 41%]
+backend/tests/integration/test_pipeline_api.py::test_end_to_end_pipeline_success PASSED [ 43%]
+backend/tests/integration/test_pipeline_api.py::test_pipeline_failure_transitions_to_failed_state PASSED [ 46%]
+backend/tests/integration/test_search_api.py::test_natural_language_semantic_search_ranking_tc_sr_01_and_tc_idx_01 PASSED [ 48%]
+backend/tests/integration/test_search_api.py::test_search_filters_category_and_file_type_tc_sr_02 PASSED [ 51%]
+backend/tests/integration/test_search_api.py::test_empty_query_and_no_results_state_tc_sr_03 PASSED [ 53%]
+backend/tests/integration/test_search_api.py::test_search_pagination_tc_sr_04 PASSED [ 56%]
+backend/tests/integration/test_search_api.py::test_predisclosure_authorization_filter_tc_sec_05 PASSED [ 58%]
+backend/tests/unit/test_ai_enrichment.py::test_embedding_dimensions_and_norm_tc_ai_01 PASSED [ 61%]
+backend/tests/unit/test_ai_enrichment.py::test_category_classification_confidence_tc_ai_02 PASSED [ 64%]
+backend/tests/unit/test_ai_enrichment.py::test_keyword_and_topic_extraction_tc_ai_03 PASSED [ 66%]
+backend/tests/unit/test_ai_enrichment.py::test_simulate_model_failure_flag PASSED [ 69%]
+backend/tests/unit/test_config.py::test_settings_defaults PASSED         [ 71%]
+backend/tests/unit/test_config.py::test_structured_logging_redacts_sensitive_keys PASSED [ 74%]
+backend/tests/unit/test_extraction.py::test_txt_extraction_tc_ext_01 PASSED [ 76%]
+backend/tests/unit/test_docx_extraction_and_metadata_tc_ext_01_02 PASSED [ 79%]
+backend/tests/unit/test_pdf_extraction_and_metadata_tc_ext_01_02 PASSED [ 82%]
+backend/tests/unit/test_extraction.py::test_simulate_parser_failure_flag PASSED [ 84%]
+backend/tests/unit/test_health.py::test_root_endpoint PASSED             [ 87%]
+backend/tests/unit/test_health.py::test_health_endpoint PASSED           [ 89%]
+backend/tests/unit/test_health.py::test_health_degraded_when_service_down PASSED [ 92%]
+backend/tests/unit/test_health.py::test_standardized_error_format_404 PASSED [ 94%]
+backend/tests/unit/test_security.py::test_password_hashing_bcrypt_tc_sec_07 PASSED [ 97%]
+backend/tests/unit/test_security.py::test_session_token_generation_entropy PASSED [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.16-final-0 _______________
+
+Name                                       Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------------------
+backend/app/__init__.py                        0      0      0      0   100%
+backend/app/api/__init__.py                    0      0      0      0   100%
+backend/app/api/admin.py                      38     10      6      1    66%   39, 42-49, 51-54, 66
+backend/app/api/audit.py                      13      1      0      0    92%   27
+backend/app/api/auth.py                       25      3      2      1    85%   32, 50, 54
+backend/app/api/categories.py                 50     20      8      0    52%   27-50, 64-75, 89, 109-117, 119-127, 139
+backend/app/api/deps.py                       18      1      4      1    91%   19
+backend/app/api/documents.py                 130     65     36      0    40%   35-36, 51-61, 66-78, 93-95, 119, 138, 157, 159-167, 210, 212-225, 227-246, 261-264, 297, 315, 328, 343-366
+backend/app/api/health.py                     26      8      0      0    69%   16-23
+backend/app/api/search.py                     12      0      0      0   100%
+backend/app/api/users.py                      39     20      4      0    44%   26-27, 38-53, 64-74
+backend/app/core/__init__.py                   0      0      0      0   100%
+backend/app/core/config.py                    38      1      2      1    95%   50
+backend/app/core/database.py                  28      8      2      1    70%   20, 46-52
+backend/app/core/errors.py                    41     10      0      0    76%   63-70, 81-83
+backend/app/core/logging.py                   35      4     10      3    84%   16-17, 45, 61
+backend/app/core/security.py                  13      2      0      0    85%   21-22
+backend/app/main.py                           78     17      2      0    76%   35-54, 102-103
+backend/app/models/__init__.py                 8      0      0      0   100%
+backend/app/models/audit.py                   16      0      0      0   100%
+backend/app/models/category.py                11      0      0      0   100%
+backend/app/models/document.py                20      0      0      0   100%
+backend/app/models/metadata.py                35      0      0      0   100%
+backend/app/models/permission.py              14      0      0      0   100%
+backend/app/models/session.py                 14      0      0      0   100%
+backend/app/models/user.py                    18      0      0      0   100%
+backend/app/schemas/__init__.py                8      0      0      0   100%
+backend/app/schemas/audit.py                  15      0      0      0   100%
+backend/app/schemas/auth.py                   14      0      0      0   100%
+backend/app/schemas/category.py               22      0      0      0   100%
+backend/app/schemas/common.py                 13      0      0      0   100%
+backend/app/schemas/document.py               55      0      0      0   100%
+backend/app/schemas/search.py                 16      0      0      0   100%
+backend/app/schemas/user.py                   22      0      0      0   100%
+backend/app/services/__init__.py               0      0      0      0   100%
+backend/app/services/ai_service.py            97     31     34      7    66%   38, 51-71, 80, 87, 117-118, 126, 133, 160, 165-167
+backend/app/services/audit_service.py         22      4      2      1    79%   40-43, 55, 58
+backend/app/services/auth_service.py          79     35     18      1    48%   31-49, 59-69, 91-111, 125, 139-151, 161-168, 171, 178-181, 191-192, 211-220
+backend/app/services/extractor.py             76      5     38     13    84%   36, 58->56, 64->117, 66->68, 68->70, 70->117, 79, 84->98, 87->90, 91->94, 96, 98->117, 102, 109
+backend/app/services/metrics_service.py       55      4     18      4    89%   30, 32, 54, 105
+backend/app/services/pipeline_service.py      78     49      8      0    34%   22-27, 41-47, 50-60, 64-67, 69-90, 92-108, 120-125, 137
+backend/app/services/search_service.py        56     24     20      2    55%   18, 24-36, 96-106, 108-131
+backend/app/services/storage_service.py       71     21     24      4    72%   24, 48, 53->exit, 63-64, 79-81, 124-126, 135-163, 167-174, 187
+backend/app/workers/__init__.py                0      0      0      0   100%
+backend/app/workers/celery_app.py              4      4      0      0     0%   1-11
+backend/app/workers/tasks.py                   7      7      0      0     0%   1-10
+--------------------------------------------------------------------------------------
+TOTAL                                       1430    354    238     40    71%
+============================= 39 passed in 34.08s ==============================
+
+OVERALL STATUS: PASS (39 of 39 passed, 71% line coverage)
+All 8 Target Test Cases (TC-MD-01, TC-ADM-01, TC-ADM-02, TC-DATA-01, TC-DATA-02, TC-OPS-02, TC-OPS-03, TC-SEC-02) Verified.
