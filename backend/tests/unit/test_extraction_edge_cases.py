@@ -1,4 +1,6 @@
 """Edge-case and error-path tests for the text extractor (AICMS-F-005, F-006, TC-EXT-01/02)."""
+import datetime
+
 import docx
 import pypdf
 import pytest
@@ -171,3 +173,25 @@ def test_pdf_with_text_is_extracted_and_not_flagged_for_ocr(tmp_path):
     assert "Quarterly security audit" in res.text
     assert res.needs_ocr is False
     assert res.word_count == 3
+
+
+# ---------------------------------------------------------------------------
+# Native creation-date metadata
+# ---------------------------------------------------------------------------
+def test_pdf_creation_date_is_reported(tmp_path):
+    writer = pypdf.PdfWriter()
+    writer.add_blank_page(width=72, height=72)
+    writer.add_metadata({"/CreationDate": "D:20260101120000Z"})
+    path = tmp_path / "dated.pdf"
+    with open(path, "wb") as fh:
+        writer.write(fh)
+    assert extract_document_content(str(path), "pdf").date is not None
+
+
+def test_docx_creation_date_is_iso_formatted(tmp_path):
+    document = docx.Document()
+    document.core_properties.created = datetime.datetime(2026, 1, 2, 3, 4, 5)
+    document.add_paragraph("dated")
+    path = tmp_path / "dated.docx"
+    document.save(str(path))
+    assert extract_document_content(str(path), "docx").date.startswith("2026-01-02T03:04:05")
