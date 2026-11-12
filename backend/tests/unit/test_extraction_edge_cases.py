@@ -134,3 +134,40 @@ def test_pdf_without_metadata_leaves_fields_none(tmp_path):
     assert res.author is None
     assert res.needs_ocr is True
     assert res.word_count == 0
+
+
+# ---------------------------------------------------------------------------
+# PDF with a real text layer (no OCR needed)
+# ---------------------------------------------------------------------------
+
+def _text_pdf(path, text):
+    """Write a minimal one-page PDF that contains extractable text."""
+    objs = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 100] /Contents 4 0 R "
+        b"/Resources << /Font << /F1 5 0 R >> >> >>",
+        None,
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    ]
+    stream = f"BT /F1 12 Tf 10 50 Td ({text}) Tj ET".encode()
+    objs[3] = b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream"
+    out, offsets = b"%PDF-1.4\n", []
+    for i, o in enumerate(objs, 1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n" % i + o + b"\nendobj\n"
+    xref = len(out)
+    out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objs) + 1)
+    for off in offsets:
+        out += b"%010d 00000 n \n" % off
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF" % (len(objs) + 1, xref)
+    path.write_bytes(out)
+
+
+def test_pdf_with_text_is_extracted_and_not_flagged_for_ocr(tmp_path):
+    path = tmp_path / "text.pdf"
+    _text_pdf(path, "Quarterly security audit")
+    res = extract_document_content(str(path), "pdf")
+    assert "Quarterly security audit" in res.text
+    assert res.needs_ocr is False
+    assert res.word_count == 3
