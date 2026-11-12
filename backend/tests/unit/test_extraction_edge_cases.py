@@ -85,3 +85,52 @@ def test_file_type_is_case_insensitive(tmp_path):
     path = tmp_path / "upper.txt"
     path.write_text("hello world")
     assert extract_document_content(str(path), "TXT").text == "hello world"
+
+
+# ---------------------------------------------------------------------------
+# DOCX / PDF metadata edge cases (no fabrication of missing metadata)
+# ---------------------------------------------------------------------------
+def test_docx_blank_metadata_stays_none(tmp_path):
+    """Whitespace-only title/author must not be reported as metadata."""
+    document = docx.Document()
+    document.core_properties.title = "   "
+    document.core_properties.author = ""
+    document.add_paragraph("Body text only.")
+    path = tmp_path / "blank_meta.docx"
+    document.save(str(path))
+
+    res = extract_document_content(str(path), "docx")
+    assert "Body text only." in res.text
+    assert res.title is None
+    assert res.author is None
+
+
+def test_docx_skips_empty_paragraphs_and_joins_table_cells(tmp_path):
+    """Empty paragraphs are dropped; table rows are joined with ' | '."""
+    document = docx.Document()
+    document.add_paragraph("First")
+    document.add_paragraph("   ")
+    document.add_paragraph("Second")
+    table = document.add_table(rows=1, cols=3)
+    for cell, value in zip(table.rows[0].cells, ["A", "", "C"]):
+        cell.text = value
+    path = tmp_path / "structure.docx"
+    document.save(str(path))
+
+    res = extract_document_content(str(path), "docx")
+    assert res.text.split("\n\n") == ["First", "Second", "A | C"]
+
+
+def test_pdf_without_metadata_leaves_fields_none(tmp_path):
+    """A PDF with no title/author reports None and flags OCR when blank."""
+    writer = pypdf.PdfWriter()
+    writer.add_blank_page(width=72, height=72)
+    path = tmp_path / "no_meta.pdf"
+    with open(path, "wb") as fh:
+        writer.write(fh)
+
+    res = extract_document_content(str(path), "pdf")
+    assert res.title is None
+    assert res.author is None
+    assert res.needs_ocr is True
+    assert res.word_count == 0
