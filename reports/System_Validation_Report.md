@@ -6,7 +6,7 @@
 **Document Identifier**: `AICMS-REP-SVR-01`  
 **Version**: 1.0  
 **Date**: 2026-10-31  
-**Authors**: Shreeverdhan M (PES1UG22CS586), Sripada Aditya (PES1UG22CS602), Srivamshi Chikkireddi (PES1UG22CS603), Shamanth SK (PES1UG22CS572)  
+**Authors**: Shreeverdhan M (PES1UG24AM265), Sripada Aditya (PES1UG24AM285), Srivamshi Chikkireddi (PES1UG24AM287), Shamanth SK (PES1UG24AM258)  
 **Repository Branch**: `feature/US-13-regression-reports`  
 **Target Environments**: Docker Compose Stack (PostgreSQL 16 pgvector, Redis 7, FastAPI 0.110, Celery 5.3, React 18 / Vite 5, Nginx 1.25 TLS Proxy)  
 
