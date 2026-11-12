@@ -52,6 +52,7 @@ def extract_document_content(file_path: str, file_type: str) -> ExtractedContent
     if not os.path.exists(file_path):
         raise AICMSException(code="FILE_NOT_FOUND", message="Storage file not found on disk.", status_code=404)
 
+    # File type is matched case-insensitively ("PDF" and "pdf" are the same format).
     ext = file_type.lower()
     text = ""
     title = None
@@ -68,7 +69,8 @@ def extract_document_content(file_path: str, file_type: str) -> ExtractedContent
             doc = docx.Document(file_path)
             paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
 
-            # Also extract table text
+            # Table cells are not in doc.paragraphs, so read them separately.
+            # Each row becomes one line, with non-empty cells joined by " | ".
             for table in doc.tables:
                 for row in table.rows:
                     row_text = " | ".join(cell.text.strip() for cell in row.cells if cell.text.strip())
@@ -77,7 +79,7 @@ def extract_document_content(file_path: str, file_type: str) -> ExtractedContent
 
             text = "\n\n".join(paragraphs).strip()
 
-            # Native metadata properties
+            # Native metadata: blank values stay None rather than being invented (TC-EXT-02).
             if doc.core_properties:
                 props = doc.core_properties
                 if props.title and props.title.strip():
@@ -112,6 +114,8 @@ def extract_document_content(file_path: str, file_type: str) -> ExtractedContent
                 if raw_date:
                     date = str(raw_date)
 
+            # No text layer means a scanned/image-only PDF: flag it for OCR review
+            # instead of failing (AICMS-F-007).
             if len(text) == 0:
                 needs_ocr = True
 
@@ -122,6 +126,8 @@ def extract_document_content(file_path: str, file_type: str) -> ExtractedContent
                 status_code=400,
             )
 
+    # Our own structured errors (e.g. UNSUPPORTED_FORMAT) pass through unchanged;
+    # any other parser exception is wrapped as EXTRACTION_ERROR below.
     except AICMSException:
         raise
     except Exception as e:
@@ -131,6 +137,7 @@ def extract_document_content(file_path: str, file_type: str) -> ExtractedContent
             status_code=500,
         )
 
+    # Counts are computed on the final stripped text.
     words = text.split() if text else []
     return ExtractedContent(
         text=text,
