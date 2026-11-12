@@ -1,3 +1,9 @@
+"""Text and native-metadata extraction for uploaded documents (US-03).
+
+Supported formats: TXT, DOCX and PDF (AICMS-F-005, AICMS-F-006). Scanned PDFs with
+no text layer are flagged with ``needs_ocr`` instead of being OCR'd here (AICMS-F-007,
+see docs/ASSUMPTIONS.md). Failures are raised as ``AICMSException`` with a stable code.
+"""
 from dataclasses import dataclass
 import os
 from typing import Optional
@@ -10,6 +16,17 @@ from backend.app.core.errors import AICMSException
 
 @dataclass
 class ExtractedContent:
+    """Result of extracting one document.
+
+    Attributes:
+        text: Full extracted text, stripped of leading/trailing whitespace.
+        title: Native title metadata, or None if the file has none (never guessed).
+        author: Native author metadata, or None if the file has none (never guessed).
+        date: Native creation date as a string, or None if the file has none.
+        needs_ocr: True when a PDF yielded no text and needs OCR review.
+        word_count: Number of whitespace-separated words in ``text``.
+        character_count: Number of characters in ``text``.
+    """
     text: str
     title: Optional[str] = None
     author: Optional[str] = None
