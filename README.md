@@ -66,9 +66,23 @@ The course templates these documents follow are in [docs/templates](docs/templat
 
 AICMS covers document upload, AI enrichment, semantic search, access control and basic administration. It is not a general-purpose enterprise document platform: it supports English-language PDF, DOCX and TXT files, and does not include real-time collaborative editing or external system integrations beyond those defined in the SRS.
 
+## Quick Start
+
+```
+git clone https://github.com/srivamshichikkireddi/AI-Powered-Content-Management-System.git
+cd AI-Powered-Content-Management-System
+copy .env.example .env      # Windows (use cp on Linux/macOS)
+docker compose up --build
+docker compose ps           # all services should be healthy
+```
+
+UI: http://localhost:5173 | API docs: http://localhost:8000/docs
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md), [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) and [docs/API_OVERVIEW.md](docs/API_OVERVIEW.md).
+
 ## Project Status
 
-**Current phase:** Requirements, design and test planning. Implementation and test execution follow the specifications in the SRS, SAD and STP.
+**Current phase:** Implementation complete and frozen at release `v1.0-freeze`. Document upload, AI enrichment, semantic search, access control and administration are implemented, with automated test evidence in `evidence/`.
 
 ## Team and Roles
 
