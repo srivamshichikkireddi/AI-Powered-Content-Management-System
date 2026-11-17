@@ -82,7 +82,7 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md), [docs/ENVIRONMENT.md](docs/ENVIRON
 
 ## Project Status
 
-**Current phase:** Requirements, design and test planning. Implementation and test execution follow the specifications in the SRS, SAD and STP.
+**Current phase:** Implementation complete and frozen at release `v1.0-freeze`. Document upload, AI enrichment, semantic search, access control and administration are implemented, with automated test evidence in `evidence/`.
 
 ## Team and Roles
 
